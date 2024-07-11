@@ -155,20 +155,6 @@ router.post('/api/organisations/:orgId/users', authenticate, async (req, res) =>
             });
         }
 
-        // Check if the user has permission to access this user's details
-        const organisations = await findUserOrganisations(req.user.userId);
-
-        // Ensure user.organisationIds is defined and an array before using includes()
-        const isAccessible = user.organisationIds && user.organisationIds.length > 0 &&
-            organisations.some(org => user.organisationIds.includes(org.orgId));
-
-        if (!isAccessible) {
-            return res.status(403).json({
-                status: 'Forbidden',
-                message: 'You do not have permission to access this user',
-                statusCode: 403
-            });
-        }
 
         // Return user data if accessible
         res.status(200).json({
