@@ -12,7 +12,7 @@ router.post('/register',
     check('firstName').not().isEmpty().withMessage('First name is required'),
     check('lastName').not().isEmpty().withMessage('Last name is required'),
     check('email').isEmail().withMessage('Valid email is required'),
-    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    check('password').not().isEmpty().withMessage('password is required'),
     check('phone').optional().isMobilePhone().withMessage('Valid phone number is required')
   ], async (req, res) => {
     const errors = validationResult(req);
