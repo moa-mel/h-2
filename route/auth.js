@@ -33,18 +33,11 @@ router.post('/register',
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await createUser({ user_name: `${firstName} ${lastName}`, user_email: email, user_password: hashedPassword });
   
-      const orgName = `${firstName}'s Organisation`;
-      const organisation = await createOrganisation({ name: orgName, description: '' });
-  
-      await addUserToOrganisation(user.user_id, organisation.org_id);
-  
-      const token = jwt.sign({ userId: user.user_id }, config.jwtSecret, { expiresIn: '1h' });
   
       res.status(201).json({
         status: 'success',
         message: 'Registration successful',
         data: {
-          accessToken: token,
           user: {
             userId: user.user_id,
             firstName: firstName,
