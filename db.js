@@ -3,11 +3,11 @@ require('dotenv').config();
 
 const localPoolConfig = {
 
-    user: 'postgres',
-    password: 'ola23',
-    host: 'localhost',
-    port: 5432,
-    database: 'postgres',
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    host: process.env.HOST,
+    port: process.env.PORT,
+    database: process.env.DATABASE,
   
 
 };

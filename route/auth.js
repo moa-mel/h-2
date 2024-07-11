@@ -1,19 +1,26 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { check, validationResult } = require('express-validator');
 const { createUser, findUserByEmail } = require('../model/user');
 const { createOrganisation, addUserToOrganisation } = require('../model/organisation');
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
-    const { firstName, lastName, email, password, phone } = req.body;
-  
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(422).json({
-        errors: [{ field: 'validation', message: 'All fields are required' }]
-      });
+router.post('/register', 
+  [
+    check('firstName').not().isEmpty().withMessage('First name is required'),
+    check('lastName').not().isEmpty().withMessage('Last name is required'),
+    check('email').isEmail().withMessage('Valid email is required'),
+    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    check('phone').optional().isMobilePhone().withMessage('Valid phone number is required')
+  ], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
     }
+  
+    const { firstName, lastName, email, password, phone } = req.body;
   
     try {
       const userExists = await findUserByEmail(email);
@@ -31,7 +38,7 @@ router.post('/register', async (req, res) => {
   
       await addUserToOrganisation(user.user_id, organisation.org_id);
   
-      const token = jwt.sign({ userId: user.user_id }, 'secretkey', { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.user_id }, config.jwtSecret, { expiresIn: '1h' });
   
       res.status(201).json({
         status: 'success',
@@ -55,7 +62,8 @@ router.post('/register', async (req, res) => {
         statusCode: 400
       });
     }
-  });
+  }
+);
 
   router.post('/login', async (req, res) => {
     const { email, password } = req.body;
