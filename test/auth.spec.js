@@ -6,7 +6,7 @@ let authToken;
 beforeAll(async () => {
   try {
     const res = await request(app)
-      .post('/auth/register')
+      .post('/api/auth/register')
       .send({
         email: 'test@example.com',
         password: 'password123',
@@ -24,7 +24,7 @@ beforeAll(async () => {
 describe('Authentication Endpoints', () => {
   test('should register user successfully with default organisation', async () => {
     const res = await request(app)
-      .post('/auth/register')
+      .post('/api/auth/register')
       .send({
         email: 'newuser@example.com',
         password: 'password123',
@@ -39,7 +39,7 @@ describe('Authentication Endpoints', () => {
 
   test('should fail if email already exists', async () => {
     const res = await request(app)
-      .post('/auth/register')
+      .post('/api/auth/register')
       .send({
         email: 'test@example.com', // Duplicate email
         password: 'password123',
@@ -53,7 +53,7 @@ describe('Authentication Endpoints', () => {
 
   test('should log the user in successfully', async () => {
     const res = await request(app)
-      .post('/auth/login')
+      .post('/api/auth/login')
       .send({
         email: 'test@example.com',
         password: 'password123'
@@ -66,7 +66,7 @@ describe('Authentication Endpoints', () => {
 
   test('should fail with invalid credentials', async () => {
     const res = await request(app)
-      .post('/auth/login')
+      .post('/api/auth/login')
       .send({
         email: 'test@example.com',
         password: 'wrongpassword'
@@ -81,7 +81,7 @@ describe('Organisation Endpoints', () => {
   beforeEach(async () => {
     if (!authToken) {
       const loginRes = await request(app)
-        .post('/auth/login')
+        .post('/api/auth/login')
         .send({
           email: 'test@example.com',
           password: 'password123'

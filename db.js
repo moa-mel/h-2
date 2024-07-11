@@ -8,15 +8,15 @@ const localPoolConfig = {
     host: 'localhost',
     port: 5432,
     database: 'postgres',
-    ssl: false
+  
 
 };
 
 const poolConfig = process.env.DATABASE_URL ? {
     connectionString: process.env.DATABASE_URL,
-    ssl: {
+   /* ssl: {
         rejectUnauthorized: false
-    }
+    } */
 } : localPoolConfig;
 
 const pool = new Pool(poolConfig);

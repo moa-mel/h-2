@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Use routes
-app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/', organisationRoutes);
 
 const PORT = 8000;
